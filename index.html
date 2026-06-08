@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CUSOL — Customer Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --indigo:   #5B6EF5;
+    --indigo-dk:#3A4FD4;
+    --indigo-lt:#8B9BF8;
+    --violet:   #7C3AED;
+    --dark:     #0C0D1A;
+    --white:    #FFFFFF;
+    --off:      #F5F5F8;
+    --ink:      #0E0F1C;
+    --mid:      #6B6C80;
+    --line:     #E2E2EA;
+    --amber:    #E8A020;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 300;
+    background: var(--white);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 56px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-wordmark {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 18px;
+    letter-spacing: 0.18em; color: var(--ink);
+  }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--indigo); }
+  .nav-right { display: flex; align-items: center; gap: 32px; }
+  .nav-link {
+    font-size: 12px; font-weight: 500;
+    color: var(--mid); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--ink); }
+  .nav-cta {
+    font-size: 12px; font-weight: 600;
+    color: var(--white); background: var(--indigo);
+    padding: 9px 20px; border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--indigo-dk); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 120px 56px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* grid sutil de fondo */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  /* fade inferior del grid */
+  .hero::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+    background: linear-gradient(transparent, var(--white));
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative; z-index: 1;
+    max-width: 820px;
+  }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--indigo);
+    margin-bottom: 28px;
+    opacity: 0; animation: up 0.7s ease 0.1s forwards;
+  }
+  .hero-tag::before {
+    content: ''; width: 20px; height: 1px; background: var(--indigo);
+  }
+
+  .hero-h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: clamp(42px, 7vw, 80px);
+    line-height: 1.04; letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 28px;
+    opacity: 0; animation: up 0.7s ease 0.2s forwards;
+  }
+  .hero-h1 .light { color: var(--mid); font-weight: 700; }
+  .hero-h1 .accent { color: var(--indigo); }
+
+  .hero-p {
+    font-size: clamp(15px, 2vw, 18px);
+    line-height: 1.7; color: var(--mid);
+    max-width: 520px;
+    margin-bottom: 44px;
+    opacity: 0; animation: up 0.7s ease 0.3s forwards;
+  }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    opacity: 0; animation: up 0.7s ease 0.4s forwards;
+  }
+  .btn-main {
+    background: var(--indigo); color: var(--white);
+    padding: 14px 28px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-main:hover { background: var(--indigo-dk); transform: translateY(-1px); }
+  .btn-outline {
+    border: 1px solid var(--line);
+    color: var(--mid); background: transparent;
+    padding: 14px 28px; border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    text-decoration: none; cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--indigo); color: var(--indigo); }
+
+  /* ícono hero flotante */
+  .hero-icon-float {
+    position: absolute;
+    right: 8%; top: 50%; transform: translateY(-50%);
+    opacity: 0; animation: floatIn 1s ease 0.5s forwards;
+    z-index: 1;
+  }
+  .icon-card {
+    width: 220px; height: 220px;
+    background: var(--off);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .icon-card::before {
+    content: '';
+    position: absolute; inset: -1px; border-radius: 29px;
+    background: linear-gradient(135deg, rgba(91,110,245,0.2), transparent 60%);
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 32px 56px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    flex-wrap: wrap;
+  }
+  .stat { display: flex; align-items: baseline; gap: 6px; }
+  .stat-n {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px;
+    color: var(--ink);
+  }
+  .stat-n sup { font-size: 14px; color: var(--indigo); }
+  .stat-l { font-size: 12px; color: var(--mid); }
+  .stats-pipe { width: 1px; height: 32px; background: var(--line); }
+
+  /* ── SERVICIOS ── */
+  .services {
+    padding: 96px 56px;
+    background: var(--white);
+  }
+  .sec-top {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 56px; flex-wrap: wrap; gap: 16px;
+  }
+  .sec-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--indigo); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sec-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--indigo); }
+  .sec-h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 32px;
+    color: var(--ink); line-height: 1.15;
+  }
+  .sec-link {
+    font-size: 12px; font-weight: 600; color: var(--indigo);
+    text-decoration: none; display: flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+  }
+  .sec-link:hover { text-decoration: underline; }
+
+  /* grid de servicios */
+  .svc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .svc-card {
+    background: var(--white);
+    padding: 32px 28px;
+    transition: background 0.2s;
+    cursor: default;
+    position: relative;
+  }
+  .svc-card:hover { background: var(--off); }
+  .svc-card:hover .svc-arrow { opacity: 1; transform: translate(0,0); }
+
+  .svc-num {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--indigo-lt); margin-bottom: 20px;
+  }
+  .svc-icon { font-size: 26px; margin-bottom: 14px; display: block; }
+  .svc-name {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+    color: var(--ink); margin-bottom: 8px; line-height: 1.2;
+  }
+  .svc-desc { font-size: 12px; color: var(--mid); line-height: 1.7; }
+  .svc-arrow {
+    position: absolute; top: 28px; right: 28px;
+    font-size: 14px; color: var(--indigo);
+    opacity: 0; transform: translate(-4px, 4px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  /* ── DIFERENCIAL ── */
+  .why {
+    padding: 96px 56px;
+    background: var(--dark);
+  }
+  .why-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+  }
+  .why-left {}
+  .why-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--indigo); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .why-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--indigo); }
+  .why-h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 36px;
+    color: var(--white); line-height: 1.15; margin-bottom: 20px;
+  }
+  .why-h2 .dim { opacity: 0.3; }
+  .why-p { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.85; }
+
+  .why-right { display: flex; flex-direction: column; gap: 3px; }
+  .why-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px 22px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(91,110,245,0.12);
+    border-radius: 10px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .why-item:hover { border-color: rgba(91,110,245,0.35); background: rgba(91,110,245,0.05); }
+  .why-num {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+    color: var(--indigo); min-width: 28px; line-height: 1.2;
+  }
+  .why-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 3px; }
+  .why-desc  { font-size: 12px; color: rgba(255,255,255,0.38); line-height: 1.6; }
+
+  /* ── PROCESO ── */
+  .process {
+    padding: 96px 56px;
+    background: var(--off);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .proc-steps {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
+    margin-top: 52px;
+    border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+  }
+  .proc-step {
+    padding: 32px 24px;
+    background: var(--white);
+    border-right: 1px solid var(--line);
+    position: relative;
+  }
+  .proc-step:last-child { border-right: none; }
+  .proc-n {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 36px;
+    color: rgba(91,110,245,0.1); line-height: 1; margin-bottom: 16px;
+  }
+  .proc-emoji { font-size: 22px; margin-bottom: 10px; display: block; }
+  .proc-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .proc-desc  { font-size: 11px; color: var(--mid); line-height: 1.65; }
+  .proc-time  {
+    display: inline-block; margin-top: 10px;
+    font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--indigo); background: rgba(91,110,245,0.08);
+    padding: 3px 9px; border-radius: 100px;
+  }
+  .proc-arrow {
+    position: absolute; top: 50%; right: -10px;
+    transform: translateY(-50%);
+    color: var(--indigo-lt); font-size: 14px; z-index: 1;
+  }
+
+  /* ── CTA ── */
+  .cta {
+    padding: 96px 56px;
+    background: var(--white);
+    text-align: center;
+  }
+  .cta-inner { max-width: 560px; margin: 0 auto; }
+  .cta-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--indigo); margin-bottom: 16px;
+  }
+  .cta-h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 38px;
+    color: var(--ink); line-height: 1.15; margin-bottom: 16px;
+  }
+  .cta-h2 .dim { color: var(--mid); font-weight: 700; }
+  .cta-p { font-size: 15px; color: var(--mid); line-height: 1.7; margin-bottom: 36px; }
+  .cta-btns { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .cta-note { margin-top: 20px; font-size: 11px; color: var(--mid); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 28px 56px;
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  .footer-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px;
+    letter-spacing: 0.15em; color: var(--ink);
+  }
+  .footer-copy { font-size: 11px; color: var(--mid); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 11px; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--indigo); }
+
+  /* ── ANIMACIONES ── */
+  @keyframes up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(-40%) translateX(20px); }
+    to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    nav, .stats-bar, .services, .why, .process, .cta, footer { padding-left: 24px; padding-right: 24px; }
+    nav { padding: 0 24px; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-icon-float { display: none; }
+    .svc-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; gap: 40px; }
+    .proc-steps { grid-template-columns: 1fr 1fr; }
+    .proc-step:nth-child(2) { border-right: none; }
+    .proc-step { border-bottom: 1px solid var(--line); }
+    .proc-step:last-child { border-bottom: none; }
+    .proc-arrow { display: none; }
+    .nav-right .nav-link { display: none; }
+    .stats-pipe { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="16" height="13" viewBox="0 0 70 56" fill="none">
+      <rect x="0" y="38" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="1.5" fill="none" opacity="0.4"/>
+      <rect x="0" y="23" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="1.8" fill="none" opacity="0.65"/>
+      <rect x="14" y="8"  width="50" height="10" rx="2" fill="#5B6EF5"/>
+    </svg>
+    <span class="nav-wordmark">CUSOL</span>
+  </a>
+  <div class="nav-right">
+    <a href="#servicios" class="nav-link">Servicios</a>
+    <a href="#proceso" class="nav-link">Proceso</a>
+    <a href="#contacto" class="nav-link">Contacto</a>
+    <a href="#contacto" class="nav-cta">Contacto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Consultora tecnológica · Buenos Aires</div>
+    <h1 class="hero-h1">
+      Tu ERP cambió<br>
+      <span class="light">el negocio.</span><br>
+      <span class="accent">Nosotros,</span> el sistema.
+    </h1>
+    <p class="hero-p">Migración de ERPs, desarrollo de software a medida, APIs, tableros de BI e integración de IA. Todo lo que tu empresa necesita para operar con tecnología del presente.</p>
+    <div class="hero-actions">
+      <a href="#contacto" class="btn-main">Solicitar una reunión →</a>
+      <a href="#servicios" class="btn-outline">Ver servicios</a>
+    </div>
+  </div>
+
+  <!-- ícono flotante -->
+  <div class="hero-icon-float">
+    <div class="icon-card">
+      <svg width="100" height="80" viewBox="0 0 140 110" fill="none" style="position:relative;z-index:1">
+        <rect x="10" y="78" width="100" height="18" rx="4" stroke="#5B6EF5" stroke-width="1.2" fill="none" opacity="0.2"/>
+        <rect x="10" y="52" width="100" height="18" rx="4" stroke="#5B6EF5" stroke-width="1.5" fill="none" opacity="0.5"/>
+        <rect x="24" y="26" width="100" height="18" rx="4" fill="#5B6EF5">
+          <animate attributeName="x" values="24;10;24" dur="3.5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
+        </rect>
+        <rect x="34" y="33" width="28" height="4" rx="2" fill="white" opacity="0.3">
+          <animate attributeName="x" values="34;20;34" dur="3.5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
+        </rect>
+        <path d="M8 35 L2 35 M2 35 L6 31 M2 35 L6 39" stroke="#5B6EF5" stroke-width="1.5" stroke-linecap="round" opacity="0.5">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="3.5s" repeatCount="indefinite"/>
+        </path>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-n">10<sup>+</sup></div>
+    <div class="stat-l">años en<br>implementación ERP</div>
+  </div>
+  <div class="stats-pipe"></div>
+  <div class="stat">
+    <div class="stat-n">2<sup>sem</sup></div>
+    <div class="stat-l">para el primer<br>diagnóstico</div>
+  </div>
+  <div class="stats-pipe"></div>
+  <div class="stat">
+    <div class="stat-n">0<sup>%</sup></div>
+    <div class="stat-l">pérdida de datos<br>históricos</div>
+  </div>
+  <div class="stats-pipe"></div>
+  <div class="stat">
+    <div class="stat-n">3<sup>áreas</sup></div>
+    <div class="stat-l">ERP · Desarrollo<br>BI e IA</div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section class="services" id="servicios">
+  <div class="sec-top">
+    <div>
+      <div class="sec-eyebrow">Servicios</div>
+      <div class="sec-h2">Todo lo que necesitás,<br>en un solo lugar.</div>
+    </div>
+    <a href="#contacto" class="sec-link">Consultá por tu caso →</a>
+  </div>
+
+  <div class="svc-grid">
+
+    <div class="svc-card">
+      <div class="svc-num">01 · ERP</div>
+      <span class="svc-icon">🔍</span>
+      <div class="svc-name">Diagnóstico, implementación y asistencia en ERPs</div>
+      <div class="svc-desc">Desde el relevamiento inicial hasta la puesta en marcha. Te ayudamos a elegir, implementar o migrar al sistema que mejor se adapta a tu negocio.</div>
+      <div class="svc-arrow">↗</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-num">02 · Dev</div>
+      <span class="svc-icon">🌐</span>
+      <div class="svc-name">Apps y webs a medida</div>
+      <div class="svc-desc">Aplicaciones web, portales internos y sitios corporativos. Mobile-first, listos para producción.</div>
+      <div class="svc-arrow">↗</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-num">03 · Dev</div>
+      <span class="svc-icon">🔌</span>
+      <div class="svc-name">APIs e integraciones</div>
+      <div class="svc-desc">Conectamos sistemas que no se comunican. Integraciones con AFIP, e-commerce, CRM y plataformas externas.</div>
+      <div class="svc-arrow">↗</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-num">04 · Dev</div>
+      <span class="svc-icon">🖥️</span>
+      <div class="svc-name">Interfaces y portales</div>
+      <div class="svc-desc">Dashboards operativos y sistemas internos que reemplazan planillas de Excel y procesos manuales.</div>
+      <div class="svc-arrow">↗</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-num">05 · BI</div>
+      <span class="svc-icon">📊</span>
+      <div class="svc-name">Tableros de BI</div>
+      <div class="svc-desc">Dashboards con datos de todas tus fuentes en tiempo real. KPIs claros, acceso por roles y exportación automática.</div>
+      <div class="svc-arrow">↗</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-num">06 · Consultoría</div>
+      <span class="svc-icon">🗺️</span>
+      <div class="svc-name">Consultoría tecnológica</div>
+      <div class="svc-desc">Asesoramiento estratégico sin sesgo de proveedor. Roadmap tecnológico, evaluación de sistemas y arquitectura.</div>
+      <div class="svc-arrow">↗</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- POR QUÉ CUSOL -->
+<section class="why">
+  <div class="why-grid">
+    <div class="why-left">
+      <div class="why-eyebrow">Por qué CUSOL</div>
+      <h2 class="why-h2">Conocemos<br>cada módulo<br><span class="dim">por dentro.</span></h2>
+      <p class="why-p">No somos consultores genéricos. Venimos del mundo ERP — sabemos exactamente qué datos guardan, cómo están estructurados y qué puede salir mal en una migración.</p>
+    </div>
+    <div class="why-right">
+      <div class="why-item">
+        <div class="why-num">01</div>
+        <div>
+          <div class="why-title">Especialistas en Softland y ERPs regionales</div>
+          <div class="why-desc">Años de implementación como analistas funcionales. Conocemos el sistema desde adentro.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">02</div>
+        <div>
+          <div class="why-title">Stack moderno disponible</div>
+          <div class="why-desc">Migramos a cualquier ERP que la empresa elija. Te acompañamos también en esa decisión.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">03</div>
+        <div>
+          <div class="why-title">Cero pérdida de datos históricos</div>
+          <div class="why-desc">Tu empresa no pierde memoria operativa en el proceso de migración.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">04</div>
+        <div>
+          <div class="why-title">Diagnóstico sin compromiso</div>
+          <div class="why-desc">Podés empezar con solo el diagnóstico. Sin presión para contratar el resto.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section class="process" id="proceso">
+  <div class="sec-eyebrow">Proceso</div>
+  <div class="sec-h2" style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--ink);margin-top:8px">Cuatro pasos. Sin sorpresas.</div>
+  <div class="proc-steps">
+    <div class="proc-step">
+      <div class="proc-n">01</div>
+      <span class="proc-emoji">🔍</span>
+      <div class="proc-title">Diagnóstico</div>
+      <div class="proc-desc">Reunión de relevamiento y análisis del sistema actual.</div>
+      <div class="proc-time">1 semana</div>
+      <div class="proc-arrow">→</div>
+    </div>
+    <div class="proc-step">
+      <div class="proc-n">02</div>
+      <span class="proc-emoji">🗺️</span>
+      <div class="proc-title">Propuesta</div>
+      <div class="proc-desc">Plan detallado, cronograma y presupuesto cerrado.</div>
+      <div class="proc-time">1 semana</div>
+      <div class="proc-arrow">→</div>
+    </div>
+    <div class="proc-step">
+      <div class="proc-n">03</div>
+      <span class="proc-emoji">⚙️</span>
+      <div class="proc-title">Ejecución</div>
+      <div class="proc-desc">Desarrollo o migración con reportes de avance semanales.</div>
+      <div class="proc-time">2–6 semanas</div>
+      <div class="proc-arrow">→</div>
+    </div>
+    <div class="proc-step">
+      <div class="proc-n">04</div>
+      <span class="proc-emoji">🚀</span>
+      <div class="proc-title">Lanzamiento</div>
+      <div class="proc-desc">Go-live, capacitación y soporte post-entrega incluido.</div>
+      <div class="proc-time">1–2 semanas</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contacto">
+  <div class="cta-inner">
+    <div class="cta-eyebrow">Empezar</div>
+    <h2 class="cta-h2">El primer paso<br><span class="dim">es una conversación.</span></h2>
+    <p class="cta-p">Sin costo. Analizamos tu situación y te decimos honestamente si podemos ayudarte y cómo.</p>
+    <div class="cta-btns">
+      <a href="mailto:hola@cusol.com.ar" class="btn-main">Escribinos →</a>
+      <a href="https://wa.me/5491157036750" class="btn-outline">WhatsApp</a>
+    </div>
+    <div class="cta-note">Buenos Aires, Argentina · Tiempos estimados según complejidad del proyecto</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <svg width="14" height="11" viewBox="0 0 70 56" fill="none">
+      <rect x="0" y="38" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="2" fill="none" opacity="0.4"/>
+      <rect x="0" y="23" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="2" fill="none" opacity="0.65"/>
+      <rect x="14" y="8" width="50" height="10" rx="2" fill="#5B6EF5"/>
+    </svg>
+    CUSOL
+    <span class="footer-copy" style="margin-left:8px">© 2025 Customer Solutions</span>
+  </div>
+  <div class="footer-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#contacto">Contacto</a>
+    <a href="mailto:hola@cusol.com.ar">hola@cusol.com.ar</a>
+  </div>
+</footer>
+
+</body>
+</html>
