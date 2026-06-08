@@ -459,6 +459,19 @@
     font-size: .85rem; font-weight: 500; transition: all .2s;
   }
   .btn-add-camper:hover { background: rgba(196,131,58,.25); }
+
+  .btn-translate {
+    background: rgba(196,131,58,.2); border: 1px solid var(--accent);
+    color: var(--accent-light); padding: .7rem 1.4rem; border-radius: 3px;
+    cursor: pointer; font-family: var(--font-body); font-size: .85rem;
+    font-weight: 500; transition: all .2s;
+  }
+  .btn-translate:hover { background: rgba(196,131,58,.35); }
+  .btn-translate:disabled { opacity: .5; cursor: not-allowed; }
+  .translate-msg { font-size: .82rem; color: var(--sand); }
+  .translate-msg.ok { color: #6fcf97; }
+  .translate-msg.err { color: #ff7070; }
+
   .btn-save-all {
     background: var(--accent); color: var(--white); border: none;
     padding: .85rem 2.5rem; border-radius: 3px; cursor: pointer;
@@ -756,18 +769,28 @@
     <!-- TAB: CAMPERVANS -->
     <div class="admin-section" id="tab-campers">
       <h3>Campervans en alquiler</h3>
+      <p style="color:var(--sand);font-size:.82rem;margin-bottom:1rem">✏️ Escribí en español y usá el botón <strong style="color:var(--accent-light)">Traducir</strong> para generar los otros idiomas automáticamente.</p>
       <div id="campersAdmin"></div>
       <button class="btn-add-camper" onclick="addCamper()">+ Agregar campervan</button>
       <br>
-      <button class="btn-save-all" style="margin-top:1.5rem" onclick="saveAll()">Guardar cambios</button>
+      <div style="display:flex;gap:.8rem;align-items:center;margin-top:1.5rem;flex-wrap:wrap">
+        <button class="btn-translate" onclick="translateAll()">🌐 Traducir automáticamente</button>
+        <span class="translate-msg" id="translateMsg"></span>
+      </div>
+      <button class="btn-save-all" style="margin-top:1rem" onclick="saveAll()">Guardar cambios</button>
       <span class="save-msg" id="saveMsg2">✓ Guardado</span>
     </div>
 
     <!-- TAB: SERVICIOS -->
     <div class="admin-section" id="tab-services">
       <h3>Textos de servicios</h3>
+      <p style="color:var(--sand);font-size:.82rem;margin-bottom:1rem">✏️ Escribí en español y usá el botón <strong style="color:var(--accent-light)">Traducir</strong> para generar los otros idiomas automáticamente.</p>
       <div id="servicesAdmin"></div>
-      <button class="btn-save-all" onclick="saveAll()">Guardar cambios</button>
+      <div style="display:flex;gap:.8rem;align-items:center;margin-top:1rem;flex-wrap:wrap">
+        <button class="btn-translate" onclick="translateAll()">🌐 Traducir automáticamente</button>
+        <span class="translate-msg" id="translateMsg2"></span>
+      </div>
+      <button class="btn-save-all" style="margin-top:1rem" onclick="saveAll()">Guardar cambios</button>
       <span class="save-msg" id="saveMsg3">✓ Guardado</span>
     </div>
 
@@ -1088,23 +1111,15 @@ function buildCampersAdmin() {
         <label>Nombre</label>
         <input type="text" id="c_name_${i}" value="${c.name}">
       </div>
-      <div class="two-col">
-        <div class="form-group">
-          <label>Descripción ES</label>
-          <textarea id="c_desc_es_${i}">${txt2(c.desc,'es')}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Descripción EN</label>
-          <textarea id="c_desc_en_${i}">${txt2(c.desc,'en')}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Descripción FR</label>
-          <textarea id="c_desc_fr_${i}">${txt2(c.desc,'fr')}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Descripción DE</label>
-          <textarea id="c_desc_de_${i}">${txt2(c.desc,'de')}</textarea>
-        </div>
+      <div class="form-group">
+        <label>Descripción (en español)</label>
+        <textarea id="c_desc_es_${i}">${txt2(c.desc,'es')}</textarea>
+      </div>
+      <div style="display:none">
+        <textarea id="c_desc_en_${i}">${txt2(c.desc,'en')}</textarea>
+        <textarea id="c_desc_fr_${i}">${txt2(c.desc,'fr')}</textarea>
+        <textarea id="c_desc_de_${i}">${txt2(c.desc,'de')}</textarea>
+        <textarea id="c_desc_pt_${i}">${txt2(c.desc,'pt')}</textarea>
       </div>
       <div class="form-group">
         <label>Características (una por línea)</label>
@@ -1127,59 +1142,31 @@ function buildServicesAdmin() {
   container.innerHTML = siteData.services.map((s,i)=>`
     <div class="admin-card">
       <h4>${s.icon} ${txt2(s.name,'es')}</h4>
-      <div class="two-col">
-        <div class="form-group">
-          <label>Nombre ES</label>
-          <input type="text" id="s_name_es_${i}" value="${txt2(s.name,'es')}">
-        </div>
-        <div class="form-group">
-          <label>Nombre EN</label>
-          <input type="text" id="s_name_en_${i}" value="${txt2(s.name,'en')}">
-        </div>
-        <div class="form-group">
-          <label>Nombre FR</label>
-          <input type="text" id="s_name_fr_${i}" value="${txt2(s.name,'fr')}">
-        </div>
-        <div class="form-group">
-          <label>Nombre DE</label>
-          <input type="text" id="s_name_de_${i}" value="${txt2(s.name,'de')}">
-        </div>
+      <div class="form-group">
+        <label>Nombre del servicio (en español)</label>
+        <input type="text" id="s_name_es_${i}" value="${txt2(s.name,'es')}">
       </div>
-      <div class="two-col">
-        <div class="form-group">
-          <label>Descripción ES</label>
-          <textarea id="s_desc_es_${i}">${txt2(s.desc,'es')}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Descripción EN</label>
-          <textarea id="s_desc_en_${i}">${txt2(s.desc,'en')}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Descripción FR</label>
-          <textarea id="s_desc_fr_${i}">${txt2(s.desc,'fr')}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Descripción DE</label>
-          <textarea id="s_desc_de_${i}">${txt2(s.desc,'de')}</textarea>
-        </div>
+      <div class="form-group">
+        <label>Descripción (en español)</label>
+        <textarea id="s_desc_es_${i}">${txt2(s.desc,'es')}</textarea>
       </div>
-      <div class="two-col">
-        <div class="form-group">
-          <label>Items ES (uno por línea)</label>
-          <textarea id="s_items_es_${i}" rows="5">${(Array.isArray(s.items)?s.items:(s.items['es']||[])).join('\n')}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Items EN (one per line)</label>
-          <textarea id="s_items_en_${i}" rows="5">${(Array.isArray(s.items)?s.items:(s.items['en']||[])).join('\n')}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Items FR (un par ligne)</label>
-          <textarea id="s_items_fr_${i}" rows="5">${(Array.isArray(s.items)?s.items:(s.items['fr']||[])).join('\n')}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Items DE (einer pro Zeile)</label>
-          <textarea id="s_items_de_${i}" rows="5">${(Array.isArray(s.items)?s.items:(s.items['de']||[])).join('\n')}</textarea>
-        </div>
+      <div class="form-group">
+        <label>Items / características (uno por línea, en español)</label>
+        <textarea id="s_items_es_${i}" rows="5">${(Array.isArray(s.items)?s.items:(s.items['es']||[])).join('\n')}</textarea>
+      </div>
+      <div style="display:none">
+        <input id="s_name_en_${i}" value="${txt2(s.name,'en')}">
+        <input id="s_name_fr_${i}" value="${txt2(s.name,'fr')}">
+        <input id="s_name_de_${i}" value="${txt2(s.name,'de')}">
+        <input id="s_name_pt_${i}" value="${txt2(s.name,'pt')||''}">
+        <textarea id="s_desc_en_${i}">${txt2(s.desc,'en')}</textarea>
+        <textarea id="s_desc_fr_${i}">${txt2(s.desc,'fr')}</textarea>
+        <textarea id="s_desc_de_${i}">${txt2(s.desc,'de')}</textarea>
+        <textarea id="s_desc_pt_${i}">${txt2(s.desc,'pt')||''}</textarea>
+        <textarea id="s_items_en_${i}">${(Array.isArray(s.items)?s.items:(s.items['en']||[])).join('\n')}</textarea>
+        <textarea id="s_items_fr_${i}">${(Array.isArray(s.items)?s.items:(s.items['fr']||[])).join('\n')}</textarea>
+        <textarea id="s_items_de_${i}">${(Array.isArray(s.items)?s.items:(s.items['de']||[])).join('\n')}</textarea>
+        <textarea id="s_items_pt_${i}">${(Array.isArray(s.items)?s.items:(s.items['pt']||[])).join('\n')}</textarea>
       </div>
     </div>
   `).join('');
@@ -1232,6 +1219,81 @@ function removeGalleryImg(i) {
   buildGalleryAdmin();
 }
 
+
+// ══════════════════════════════════════════════
+//  TRANSLATION — MyMemory API (free, no key)
+// ══════════════════════════════════════════════
+async function translateText(text, targetLang) {
+  if (!text || !text.trim()) return '';
+  // MyMemory language codes
+  const langMap = { en:'en', fr:'fr', de:'de', pt:'pt-BR' };
+  const to = langMap[targetLang] || targetLang;
+  try {
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=es|${to}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.responseStatus === 200) return data.responseData.translatedText;
+    return text; // fallback to original
+  } catch(e) {
+    return text;
+  }
+}
+
+async function translateLines(text, targetLang) {
+  // translate line by line (for feature lists)
+  const lines = text.split('\n').filter(l => l.trim());
+  const translated = await Promise.all(lines.map(l => translateText(l, targetLang)));
+  return translated.join('\n');
+}
+
+async function translateAll() {
+  const langs = ['en','fr','de','pt'];
+  const btns = document.querySelectorAll('.btn-translate');
+  const msgs = document.querySelectorAll('.translate-msg');
+
+  btns.forEach(b => { b.disabled = true; b.textContent = '⏳ Traduciendo...'; });
+  msgs.forEach(m => { m.textContent = 'Traduciendo, espera un momento...'; m.className = 'translate-msg'; });
+
+  try {
+    // ── Translate campers ──
+    for (let i = 0; i < siteData.campers.length; i++) {
+      const descEs = document.getElementById(`c_desc_es_${i}`)?.value || '';
+      for (const lang of langs) {
+        const translated = await translateText(descEs, lang);
+        const el = document.getElementById(`c_desc_${lang}_${i}`);
+        if (el) el.value = translated;
+      }
+    }
+
+    // ── Translate services ──
+    for (let i = 0; i < siteData.services.length; i++) {
+      const nameEs  = document.getElementById(`s_name_es_${i}`)?.value || '';
+      const descEs  = document.getElementById(`s_desc_es_${i}`)?.value || '';
+      const itemsEs = document.getElementById(`s_items_es_${i}`)?.value || '';
+
+      for (const lang of langs) {
+        const tName  = await translateText(nameEs, lang);
+        const tDesc  = await translateText(descEs, lang);
+        const tItems = await translateLines(itemsEs, lang);
+        const nEl = document.getElementById(`s_name_${lang}_${i}`);
+        const dEl = document.getElementById(`s_desc_${lang}_${i}`);
+        const iEl = document.getElementById(`s_items_${lang}_${i}`);
+        if (nEl) nEl.value = tName;
+        if (dEl) dEl.value = tDesc;
+        if (iEl) iEl.value = tItems;
+      }
+    }
+
+    msgs.forEach(m => { m.textContent = '✓ Traducción completa'; m.className = 'translate-msg ok'; });
+    setTimeout(() => msgs.forEach(m => { m.textContent = ''; m.className = 'translate-msg'; }), 4000);
+
+  } catch(e) {
+    msgs.forEach(m => { m.textContent = '✗ Error al traducir. Intentá de nuevo.'; m.className = 'translate-msg err'; });
+  }
+
+  btns.forEach(b => { b.disabled = false; b.textContent = '🌐 Traducir automáticamente'; });
+}
+
 // ══════════════════════════════════════════════
 //  SAVE
 // ══════════════════════════════════════════════
@@ -1246,10 +1308,11 @@ function saveAll() {
     id: siteData.campers[i].id,
     name: document.getElementById(`c_name_${i}`).value,
     desc: {
-      es: document.getElementById(`c_desc_es_${i}`).value,
-      en: document.getElementById(`c_desc_en_${i}`).value,
-      fr: document.getElementById(`c_desc_fr_${i}`).value,
-      de: document.getElementById(`c_desc_de_${i}`).value,
+      es: document.getElementById(`c_desc_es_${i}`)?.value || '',
+      en: document.getElementById(`c_desc_en_${i}`)?.value || '',
+      fr: document.getElementById(`c_desc_fr_${i}`)?.value || '',
+      de: document.getElementById(`c_desc_de_${i}`)?.value || '',
+      pt: document.getElementById(`c_desc_pt_${i}`)?.value || '',
     },
     features: document.getElementById(`c_feat_${i}`).value.split('\n').filter(f=>f.trim()),
     img: document.getElementById(`c_img_${i}`).value.trim(),
@@ -1258,9 +1321,9 @@ function saveAll() {
   // Services
   siteData.services = siteData.services.map((_,i) => ({
     icon: siteData.services[i].icon,
-    name: { es: document.getElementById(`s_name_es_${i}`).value, en: document.getElementById(`s_name_en_${i}`).value, fr: document.getElementById(`s_name_fr_${i}`).value, de: document.getElementById(`s_name_de_${i}`).value },
-    desc: { es: document.getElementById(`s_desc_es_${i}`).value, en: document.getElementById(`s_desc_en_${i}`).value, fr: document.getElementById(`s_desc_fr_${i}`).value, de: document.getElementById(`s_desc_de_${i}`).value },
-    items: { es: document.getElementById(`s_items_es_${i}`).value.split('\n').filter(f=>f.trim()), en: document.getElementById(`s_items_en_${i}`).value.split('\n').filter(f=>f.trim()), fr: document.getElementById(`s_items_fr_${i}`).value.split('\n').filter(f=>f.trim()), de: document.getElementById(`s_items_de_${i}`).value.split('\n').filter(f=>f.trim()) }
+    name: { es: document.getElementById(`s_name_es_${i}`)?.value||'', en: document.getElementById(`s_name_en_${i}`)?.value||'', fr: document.getElementById(`s_name_fr_${i}`)?.value||'', de: document.getElementById(`s_name_de_${i}`)?.value||'', pt: document.getElementById(`s_name_pt_${i}`)?.value||'' },
+    desc: { es: document.getElementById(`s_desc_es_${i}`)?.value||'', en: document.getElementById(`s_desc_en_${i}`)?.value||'', fr: document.getElementById(`s_desc_fr_${i}`)?.value||'', de: document.getElementById(`s_desc_de_${i}`)?.value||'', pt: document.getElementById(`s_desc_pt_${i}`)?.value||'' },
+    items: { es: (document.getElementById(`s_items_es_${i}`)?.value||'').split('\n').filter(f=>f.trim()), en: (document.getElementById(`s_items_en_${i}`)?.value||'').split('\n').filter(f=>f.trim()), fr: (document.getElementById(`s_items_fr_${i}`)?.value||'').split('\n').filter(f=>f.trim()), de: (document.getElementById(`s_items_de_${i}`)?.value||'').split('\n').filter(f=>f.trim()), pt: (document.getElementById(`s_items_pt_${i}`)?.value||'').split('\n').filter(f=>f.trim()) }
   }));
 
   // Gallery
