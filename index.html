@@ -115,7 +115,7 @@
 
   .hero-h1 {
     font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: clamp(32px, 5vw, 80px);
+    font-weight: 800; font-size: clamp(26px, 5vw, 80px);
     line-height: 1.04; letter-spacing: -0.02em;
     color: var(--ink);
     margin-bottom: 28px;
@@ -390,10 +390,11 @@
     /* Hero */
     .hero { padding: 72px 20px 48px; min-height: auto; }
     .hero-h1 {
-      font-size: 28px;
-      line-height: 1.15;
+      font-size: clamp(22px, 7.5vw, 36px);
+      line-height: 1.18;
       letter-spacing: -0.01em;
     }
+    .hero-h1 br { display: none; }
     .hero-tag { font-size: 9px; margin-bottom: 16px; }
     .hero-p { font-size: 14px; margin-bottom: 28px; }
     .hero-actions { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -411,12 +412,12 @@
     .sec-top { flex-direction: column; align-items: flex-start; gap: 8px; }
     .svc-grid { grid-template-columns: 1fr; }
     .svc-card { padding: 22px 18px; }
-    .sec-h2 { font-size: 22px; }
+    .sec-h2 { font-size: clamp(18px, 5vw, 22px); }
 
     /* Why */
     .why { padding: 40px 20px; }
     .why-grid { grid-template-columns: 1fr; gap: 28px; }
-    .why-h2 { font-size: 24px; }
+    .why-h2 { font-size: clamp(20px, 5.5vw, 24px); }
 
     /* Proceso */
     .process { padding: 40px 20px; }

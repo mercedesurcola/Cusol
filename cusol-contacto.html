@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CUSOL — Contacto</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --indigo:   #5B6EF5;
+    --indigo-dk:#3A4FD4;
+    --indigo-lt:#8B9BF8;
+    --violet:   #7C3AED;
+    --dark:     #0C0D1A;
+    --white:    #FFFFFF;
+    --off:      #F5F5F8;
+    --ink:      #0E0F1C;
+    --mid:      #6B6C80;
+    --line:     #E2E2EA;
+    --amber:    #E8A020;
+    --green:    #22C55E;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 300;
+    background: var(--white);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 56px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-wordmark { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: 0.18em; color: var(--ink); }
+  .nav-right { display: flex; align-items: center; gap: 32px; }
+  .nav-link { font-size: 12px; font-weight: 500; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+  .nav-link:hover { color: var(--ink); }
+  .nav-link.active { color: var(--indigo); font-weight: 600; }
+  .nav-cta { font-size: 12px; font-weight: 600; color: var(--white); background: var(--indigo); padding: 9px 20px; border-radius: 6px; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--indigo-dk); }
+
+  /* ── PAGE HEADER ── */
+  .page-head {
+    padding: 120px 56px 64px;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-head::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .page-head::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+    background: linear-gradient(transparent, var(--white));
+  }
+  .ph-left { position: relative; z-index: 1; }
+  .ph-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--indigo); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+    animation: up 0.6s ease 0.1s both;
+  }
+  .ph-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--indigo); }
+  .ph-h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05; letter-spacing: -0.02em; color: var(--ink);
+    animation: up 0.6s ease 0.2s both;
+  }
+  .ph-h1 .dim { color: var(--mid); }
+  .ph-right { position: relative; z-index: 1; animation: up 0.6s ease 0.3s both; }
+  .ph-p { font-size: 15px; line-height: 1.75; color: var(--mid); max-width: 380px; }
+
+  /* ── MAIN GRID ── */
+  .contact-main {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    min-height: calc(100vh - 280px);
+  }
+
+  /* ── COLUMNA IZQUIERDA: info ── */
+  .contact-info {
+    padding: 64px 48px 64px 56px;
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 48px;
+  }
+
+  .info-block {}
+  .info-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--indigo); margin-bottom: 16px;
+  }
+
+  /* canal directo */
+  .channel-card {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    background: var(--white);
+  }
+  .channel-card:hover { border-color: var(--indigo); background: var(--off); transform: translateX(3px); }
+  .channel-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .ch-wa   { background: rgba(34,197,94,0.1); }
+  .ch-mail { background: rgba(91,110,245,0.1); }
+  .channel-text {}
+  .channel-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .channel-val  { font-size: 12px; color: var(--mid); }
+  .channel-badge {
+    margin-left: auto;
+    font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--green); background: rgba(34,197,94,0.1);
+    padding: 3px 8px; border-radius: 100px; white-space: nowrap;
+  }
+
+  /* horario */
+  .hours-grid { display: flex; flex-direction: column; gap: 8px; }
+  .hour-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .hour-row:last-child { border-bottom: none; }
+  .hour-day { color: var(--mid); }
+  .hour-time { color: var(--ink); font-weight: 500; }
+  .hour-closed { color: var(--line); }
+
+  /* servicios rápidos */
+  .quick-services { display: flex; flex-wrap: wrap; gap: 8px; }
+  .qs-chip {
+    font-size: 11px; font-weight: 500;
+    color: var(--mid); background: var(--off);
+    border: 1px solid var(--line);
+    padding: 6px 12px; border-radius: 100px;
+    cursor: default;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .qs-chip:hover { border-color: var(--indigo); color: var(--indigo); }
+
+  /* ubicación */
+  .location-box {
+    padding: 16px 18px;
+    background: var(--off);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .loc-pin { font-size: 20px; }
+  .loc-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .loc-sub  { font-size: 11px; color: var(--mid); }
+
+  /* ── COLUMNA DERECHA: formulario ── */
+  .contact-form-wrap {
+    padding: 64px 56px 64px 48px;
+    background: var(--off);
+  }
+
+  .form-title {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .form-sub { font-size: 13px; color: var(--mid); margin-bottom: 36px; line-height: 1.6; }
+
+  /* form */
+  .form { display: flex; flex-direction: column; gap: 18px; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--mid);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px; font-weight: 400;
+    color: var(--ink);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    appearance: none;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(91,110,245,0.1);
+  }
+  .field input::placeholder,
+  .field textarea::placeholder { color: var(--line); }
+  .field textarea { resize: vertical; min-height: 110px; }
+
+  /* select arrow */
+  .field-select-wrap { position: relative; }
+  .field-select-wrap::after {
+    content: '↓';
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 11px; color: var(--mid); pointer-events: none;
+  }
+
+  /* checkboxes servicios */
+  .services-check { display: flex; flex-wrap: wrap; gap: 8px; }
+  .svc-chk { display: none; }
+  .svc-chk-label {
+    font-size: 11px; font-weight: 500;
+    color: var(--mid); background: var(--white);
+    border: 1px solid var(--line);
+    padding: 7px 13px; border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .svc-chk:checked + .svc-chk-label {
+    background: var(--indigo);
+    border-color: var(--indigo);
+    color: var(--white);
+  }
+  .svc-chk-label:hover { border-color: var(--indigo); color: var(--indigo); }
+  .svc-chk:checked + .svc-chk-label:hover { color: var(--white); }
+
+  /* submit */
+  .form-footer {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    margin-top: 4px;
+  }
+  .form-note { font-size: 11px; color: var(--mid); }
+  .btn-submit {
+    background: var(--indigo); color: var(--white);
+    padding: 14px 32px; border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
+    border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-submit:hover { background: var(--indigo-dk); transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+
+  /* ── SUCCESS STATE ── */
+  .form-success {
+    display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    gap: 16px;
+  }
+  .success-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(34,197,94,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .success-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 24px; color: var(--ink); }
+  .success-p { font-size: 14px; color: var(--mid); line-height: 1.7; max-width: 300px; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 28px 56px;
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  .footer-brand { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; letter-spacing: 0.15em; color: var(--ink); }
+  .footer-copy { font-size: 11px; color: var(--mid); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 11px; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--indigo); }
+
+  /* ── ANIM ── */
+  @keyframes up {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    /* Nav */
+    nav { padding: 0 20px; height: 56px; }
+    .nav-right .nav-link { display: none; }
+    .nav-wordmark { font-size: 16px; }
+    .nav-cta { padding: 8px 14px; font-size: 11px; }
+
+    /* Page head */
+    .page-head {
+      grid-template-columns: 1fr;
+      padding: 72px 20px 36px;
+      gap: 14px;
+    }
+    .ph-h1 {
+      font-size: clamp(22px, 7vw, 36px) !important;
+      line-height: 1.15;
+    }
+    .ph-h1 br { display: none; }
+    .ph-p { font-size: 13px; max-width: 100%; }
+
+    /* Main layout: stacked */
+    .contact-main { grid-template-columns: 1fr; }
+
+    /* Info panel */
+    .contact-info {
+      padding: 28px 20px;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+
+    /* Form */
+    .contact-form-wrap { padding: 28px 20px 40px; }
+    .form-title { font-size: clamp(16px, 5vw, 20px); }
+    .field-row { grid-template-columns: 1fr; }
+    .btn-submit { width: 100%; justify-content: center; }
+    .form-footer { flex-direction: column-reverse; align-items: stretch; gap: 10px; }
+
+    /* Channels */
+    .channel-card { padding: 14px 16px; }
+    .channel-name { font-size: 12px; }
+
+    /* Footer */
+    footer {
+      padding: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .footer-links { flex-wrap: wrap; gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg width="16" height="13" viewBox="0 0 70 56" fill="none">
+      <rect x="0" y="38" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="1.5" fill="none" opacity="0.4"/>
+      <rect x="0" y="23" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="1.8" fill="none" opacity="0.65"/>
+      <rect x="14" y="8"  width="50" height="10" rx="2" fill="#5B6EF5"/>
+    </svg>
+    <span class="nav-wordmark">CUSOL</span>
+  </a>
+  <div class="nav-right">
+    <a href="index.html#servicios" class="nav-link">Servicios</a>
+    <a href="index.html#proceso" class="nav-link">Proceso</a>
+    <a href="#" class="nav-link active">Contacto</a>
+    <a href="https://wa.me/5491157036750" target="_blank" class="nav-cta">Escribinos →</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-head">
+  <div class="ph-left">
+    <div class="ph-eyebrow">Contacto</div>
+    <h1 class="ph-h1">Hablemos<br><span class="dim">de tu proyecto.</span></h1>
+  </div>
+  <div class="ph-right">
+    <p class="ph-p">Agendá una reunión sin compromiso. Contanos qué sistema usás y qué necesitás resolver — en menos de 24hs coordinamos una llamada.</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="contact-main">
+
+  <!-- INFO -->
+  <div class="contact-info">
+
+    <div class="info-block">
+      <div class="info-label">Contacto directo</div>
+      <a href="https://wa.me/5491157036750?text=Hola!%20Quiero%20consultar%20sobre%20una%20migraci%C3%B3n%20ERP." target="_blank" class="channel-card">
+        <div class="channel-icon ch-wa">💬</div>
+        <div class="channel-text">
+          <div class="channel-name">WhatsApp</div>
+          <div class="channel-val">+54 9 11 5703-6750</div>
+        </div>
+        <div class="channel-badge">Respuesta rápida</div>
+      </a>
+      <a href="mailto:hola@cusol.com.ar" class="channel-card">
+        <div class="channel-icon ch-mail">✉️</div>
+        <div class="channel-text">
+          <div class="channel-name">Email</div>
+          <div class="channel-val">hola@cusol.com.ar</div>
+        </div>
+      </a>
+    </div>
+
+    
+    </div>
+
+    <div class="info-block">
+      <div class="info-label">Podemos ayudarte con</div>
+      <div class="quick-services">
+        <span class="qs-chip">Migración ERP</span>
+        <span class="qs-chip">Implementación ERP</span>
+        <span class="qs-chip">Elección de ERP</span>
+        <span class="qs-chip">Consultoría Softland</span>
+        <span class="qs-chip">Softland Logic</span>
+        <span class="qs-chip">Apps web</span>
+        <span class="qs-chip">APIs</span>
+        <span class="qs-chip">Tableros BI</span>
+        <span class="qs-chip">Automatización IA</span>
+        <span class="qs-chip">Consultoría tecnológica</span>
+      </div>
+    </div>
+
+    <div class="info-block">
+      <div class="info-label">Ubicación</div>
+      <div class="location-box">
+        <span class="loc-pin">📍</span>
+        <div>
+          <div class="loc-name">Buenos Aires, Argentina</div>
+          <div class="loc-sub">Atención presencial y remota en todo el país</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="contact-form-wrap">
+    <div class="form-title">Contanos tu caso</div>
+    <div class="form-sub">Completá el formulario y coordinamos una reunión para analizar tu situación y ver cómo podemos ayudarte.</div>
+
+    <div id="formWrap">
+      <div class="form" id="contactForm">
+
+        <div class="field-row">
+          <div class="field">
+            <label>Nombre *</label>
+            <input type="text" id="nombre" placeholder="Tu nombre" required>
+          </div>
+          <div class="field">
+            <label>Empresa</label>
+            <input type="text" id="empresa" placeholder="Nombre de la empresa">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Email *</label>
+            <input type="email" id="email" placeholder="tu@empresa.com" required>
+          </div>
+          <div class="field">
+            <label>Teléfono / WhatsApp</label>
+            <input type="tel" id="telefono" placeholder="+54 9 11 ...">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Sistema actual</label>
+          <div class="field-select-wrap">
+            <select id="sistema">
+              <option value="" disabled selected>¿Qué sistema usás hoy?</option>
+              <option>Softland</option>
+              <option>Tango Gestión</option>
+              <option>Bejerman</option>
+              <option>SAP Business One</option>
+              <option>Bind ERP</option>
+              <option>Odoo</option>
+              <option>Excel / sin sistema</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>¿En qué te podemos ayudar? (podés elegir varios)</label>
+          <div class="services-check">
+            <input type="checkbox" class="svc-chk" id="s1"><label class="svc-chk-label" for="s1">Migración ERP</label>
+            <input type="checkbox" class="svc-chk" id="s2"><label class="svc-chk-label" for="s2">Implementación ERP</label>
+            <input type="checkbox" class="svc-chk" id="s3"><label class="svc-chk-label" for="s3">Elección de ERP</label>
+            <input type="checkbox" class="svc-chk" id="s4"><label class="svc-chk-label" for="s4">Consultoría Softland</label>
+            <input type="checkbox" class="svc-chk" id="s5"><label class="svc-chk-label" for="s5">Customización Softland Logic</label>
+            <input type="checkbox" class="svc-chk" id="s6"><label class="svc-chk-label" for="s6">Diagnóstico ERP</label>
+            <input type="checkbox" class="svc-chk" id="s7"><label class="svc-chk-label" for="s7">App / Web a medida</label>
+            <input type="checkbox" class="svc-chk" id="s8"><label class="svc-chk-label" for="s8">API / Integración</label>
+            <input type="checkbox" class="svc-chk" id="s9"><label class="svc-chk-label" for="s9">Tablero BI</label>
+            <input type="checkbox" class="svc-chk" id="s10"><label class="svc-chk-label" for="s10">Automatización IA</label>
+            <input type="checkbox" class="svc-chk" id="s11"><label class="svc-chk-label" for="s11">Consultoría tecnológica</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Contanos más (opcional)</label>
+          <textarea id="mensaje" placeholder="¿Qué problema querés resolver? ¿Cuántos usuarios tiene el sistema? ¿Hay algún plazo o urgencia?"></textarea>
+        </div>
+
+        <div class="form-footer">
+          <div class="form-note">* Campos obligatorios · Tiempos de proyecto son estimados</div>
+          <button class="btn-submit" onclick="submitForm()">Enviar consulta →</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="form-success" id="formSuccess">
+      <div class="success-icon">✅</div>
+      <div class="success-title">¡Mensaje recibido!</div>
+      <p class="success-p">Gracias por contactarnos. Te respondemos en menos de 24hs hábiles con los próximos pasos.</p>
+      <a href="https://wa.me/5491157036750?text=Hola!%20Acabo%20de%20completar%20el%20formulario%20de%20contacto." target="_blank" style="font-size:12px;color:var(--indigo);text-decoration:none;margin-top:8px">¿Querés escribirnos por WhatsApp también? →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <svg width="14" height="11" viewBox="0 0 70 56" fill="none">
+      <rect x="0" y="38" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="2" fill="none" opacity="0.4"/>
+      <rect x="0" y="23" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="2" fill="none" opacity="0.65"/>
+      <rect x="14" y="8" width="50" height="10" rx="2" fill="#5B6EF5"/>
+    </svg>
+    CUSOL
+    <span class="footer-copy" style="margin-left:8px">© 2025 Customer Solutions</span>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#servicios">Servicios</a>
+    <a href="mailto:hola@cusol.com.ar">hola@cusol.com.ar</a>
+    <a href="https://wa.me/5491157036750" target="_blank">WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+function submitForm() {
+  const nombre = document.getElementById('nombre').value.trim();
+  const email  = document.getElementById('email').value.trim();
+  if (!nombre || !email) {
+    alert('Por favor completá nombre y email.');
+    return;
+  }
+  // Construir mensaje para WhatsApp como fallback
+  const empresa  = document.getElementById('empresa').value;
+  const telefono = document.getElementById('telefono').value;
+  const sistema  = document.getElementById('sistema').value;
+  const mensaje  = document.getElementById('mensaje').value;
+  const servicios = [...document.querySelectorAll('.svc-chk:checked')]
+    .map(c => c.nextElementSibling.textContent).join(', ');
+
+  const waText = encodeURIComponent(
+    `Hola! Me contacté por el formulario.\n\n` +
+    `*Nombre:* ${nombre}\n` +
+    `*Empresa:* ${empresa || '-'}\n` +
+    `*Email:* ${email}\n` +
+    `*Tel:* ${telefono || '-'}\n` +
+    `*Sistema actual:* ${sistema || '-'}\n` +
+    `*Servicios:* ${servicios || '-'}\n` +
+    `*Mensaje:* ${mensaje || '-'}`
+  );
+
+  // Mostrar éxito
+  document.getElementById('formWrap').style.display = 'none';
+  const success = document.getElementById('formSuccess');
+  success.style.display = 'flex';
+
+  // Abrir mailto como envío principal
+  const subject = encodeURIComponent(`Consulta CUSOL — ${nombre}`);
+  const body = encodeURIComponent(
+    `Nombre: ${nombre}\nEmpresa: ${empresa}\nEmail: ${email}\nTeléfono: ${telefono}\nSistema actual: ${sistema}\nServicios: ${servicios}\n\nMensaje:\n${mensaje}`
+  );
+  window.location.href = `mailto:hola@cusol.com.ar?subject=${subject}&body=${body}`;
+}
+</script>
+
+</body>
+</html>
