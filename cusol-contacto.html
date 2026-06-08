@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CUSOL — Contacto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -87,7 +89,7 @@
   .ph-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--indigo); }
   .ph-h1 {
     font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: clamp(36px, 5vw, 56px);
+    font-size: 52px;
     line-height: 1.05; letter-spacing: -0.02em; color: var(--ink);
     animation: up 0.6s ease 0.2s both;
   }
@@ -311,53 +313,31 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 860px) {
-    /* Nav */
     nav { padding: 0 20px; height: 56px; }
     .nav-right .nav-link { display: none; }
     .nav-wordmark { font-size: 16px; }
-    .nav-cta { padding: 8px 14px; font-size: 11px; }
+    .nav-cta { padding: 8px 14px; font-size: 12px; }
 
-    /* Page head */
-    .page-head {
-      grid-template-columns: 1fr;
-      padding: 72px 20px 36px;
-      gap: 14px;
-    }
-    .ph-h1 {
-      font-size: clamp(22px, 7vw, 36px) !important;
-      line-height: 1.15;
-    }
-    .ph-h1 br { display: none; }
+    .page-head { grid-template-columns: 1fr; padding: 80px 24px 36px; gap: 14px; }
+    .ph-h1 { font-size: 28px; line-height: 1.12; }
     .ph-p { font-size: 13px; max-width: 100%; }
 
-    /* Main layout: stacked */
     .contact-main { grid-template-columns: 1fr; }
+    .contact-info { padding: 28px 24px; border-right: none; border-bottom: 1px solid var(--line); }
+    .contact-form-wrap { padding: 28px 24px 40px; }
 
-    /* Info panel */
-    .contact-info {
-      padding: 28px 20px;
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-    }
-
-    /* Form */
-    .contact-form-wrap { padding: 28px 20px 40px; }
-    .form-title { font-size: clamp(16px, 5vw, 20px); }
+    .form-title { font-size: 20px; }
+    .form-sub { font-size: 13px; }
     .field-row { grid-template-columns: 1fr; }
-    .btn-submit { width: 100%; justify-content: center; }
+    .field input, .field select, .field textarea { font-size: 16px; }
+    .btn-submit { width: 100%; justify-content: center; font-size: 15px; padding: 15px; }
     .form-footer { flex-direction: column-reverse; align-items: stretch; gap: 10px; }
 
-    /* Channels */
     .channel-card { padding: 14px 16px; }
-    .channel-name { font-size: 12px; }
+    .quick-services { gap: 6px; }
+    .qs-chip { font-size: 11px; padding: 5px 10px; }
 
-    /* Footer */
-    footer {
-      padding: 20px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-    }
+    footer { padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 12px; }
     .footer-links { flex-wrap: wrap; gap: 14px; }
   }
 </style>
@@ -386,7 +366,7 @@
 <div class="page-head">
   <div class="ph-left">
     <div class="ph-eyebrow">Contacto</div>
-    <h1 class="ph-h1">Hablemos<br><span class="dim">de tu proyecto.</span></h1>
+    <h1 class="ph-h1">Hablemos <span class="dim">de tu proyecto.</span></h1>
   </div>
   <div class="ph-right">
     <p class="ph-p">Agendá una reunión sin compromiso. Contanos qué sistema usás y qué necesitás resolver — en menos de 24hs coordinamos una llamada.</p>

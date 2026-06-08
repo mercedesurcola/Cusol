@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CUSOL — Servicios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -79,7 +81,7 @@
   .ph-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--indigo); }
   .ph-h1 {
     font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: clamp(36px, 5vw, 58px);
+    font-size: 52px;
     line-height: 1.05; letter-spacing: -0.02em; color: var(--ink);
     margin-bottom: 20px;
   }
@@ -304,59 +306,43 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 860px) {
-    /* Nav */
     nav { padding: 0 20px; height: 56px; }
     .nav-right .nav-link { display: none; }
     .nav-wordmark { font-size: 16px; }
-    .nav-cta { padding: 8px 14px; font-size: 11px; }
+    .nav-cta { padding: 8px 14px; font-size: 12px; }
 
-    /* Page head */
-    .page-head { padding: 72px 20px 40px; }
-    .ph-h1 {
-      font-size: clamp(22px, 7vw, 36px) !important;
-      line-height: 1.15;
-    }
-    .ph-h1 br { display: none; }
-    .ph-p { font-size: 13px; }
+    .page-head { padding: 80px 24px 48px; }
+    .ph-h1 { font-size: 28px; line-height: 1.12; }
+    .ph-p { font-size: 13px; max-width: 100%; }
 
-    /* Area nav */
     .area-nav { padding: 0 8px; }
-    .area-tab { padding: 12px 14px; font-size: 11px; }
+    .area-tab { padding: 12px 12px; font-size: 11px; }
 
-    /* Area header */
-    .area-header { grid-template-columns: 1fr; padding: 32px 20px 24px; gap: 12px; }
-    .area-h2 { font-size: clamp(20px, 6vw, 28px); }
+    .area-header { grid-template-columns: 1fr; padding: 32px 24px 20px; gap: 12px; }
+    .area-h2 { font-size: 24px; }
+    .area-desc { font-size: 13px; }
 
-    /* Service rows → stacked cards */
-    .services-list { padding: 0 20px 32px; }
+    .services-list { padding: 0 24px 32px; gap: 8px; }
     .svc-row { grid-template-columns: 1fr; }
     .svc-left { border-right: none; border-bottom: 1px solid var(--line); padding: 20px 18px; }
-    .svc-title { font-size: clamp(14px, 4vw, 17px); }
+    .svc-row.dark .svc-left { border-right: none; }
+    .svc-title { font-size: 15px; }
     .svc-right { grid-template-columns: 1fr; gap: 16px; padding: 20px 18px; }
+    .svc-desc-text { font-size: 13px; }
+    .svc-inc-item { font-size: 12px; }
 
-    /* CTA inline */
-    .inline-cta { margin: 0 20px 32px; flex-direction: column; }
-    .inline-cta.dark-bg { padding: 20px; margin: 0; }
+    .inline-cta { margin: 0 24px 32px; flex-direction: column; }
+    .inline-cta.dark-bg { padding: 20px 24px; margin: 0; }
 
-    /* Final CTA */
-    .final-cta { padding: 48px 20px; }
-    .fcta-h2 {
-      font-size: clamp(20px, 6vw, 28px);
-    }
-    .fcta-h2 br { display: none; }
+    .final-cta { padding: 48px 24px; }
+    .fcta-h2 { font-size: 26px; }
     .fcta-btns { flex-direction: column; align-items: stretch; }
-    .btn-main, .btn-outline { text-align: center; justify-content: center; }
+    .btn-main { text-align: center; justify-content: center; }
+    .btn-outline { text-align: center; justify-content: center; }
 
-    /* Footer */
-    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+    footer { padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 12px; }
     .footer-links { flex-wrap: wrap; gap: 14px; }
   }
-
-  @keyframes up {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .ph-inner { animation: up 0.6s ease 0.1s both; }
 </style>
 </head>
 <body>
@@ -383,7 +369,7 @@
 <div class="page-head">
   <div class="ph-inner">
     <div class="ph-eyebrow">Servicios</div>
-    <h1 class="ph-h1">Lo que hacemos<br><span class="dim">y cómo lo hacemos.</span></h1>
+    <h1 class="ph-h1">Lo que hacemos <span class="dim">y cómo lo hacemos.</span></h1>
     <p class="ph-p">Tres áreas de trabajo, doce servicios. Cada uno pensado para resolver un problema concreto de tu empresa.</p>
   </div>
 </div>
@@ -745,7 +731,7 @@
 <!-- CTA FINAL -->
 <div class="final-cta">
   <div class="fcta-eyebrow">¿Por dónde empezar?</div>
-  <h2 class="fcta-h2">Una reunión.<br><span class="dim">Sin compromiso.</span></h2>
+  <h2 class="fcta-h2">Una reunión. <span class="dim">Sin compromiso.</span></h2>
   <p class="fcta-p">Contanos qué sistema usás y qué necesitás resolver. En una reunión inicial evaluamos tu situación y te decimos qué opciones tenés.</p>
   <div class="fcta-btns">
     <a href="cusol-contacto.html" class="btn-main">Agendar reunión →</a>
