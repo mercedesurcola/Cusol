@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CUSOL — Servicios</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --indigo:   #5B6EF5;
+    --indigo-dk:#3A4FD4;
+    --indigo-lt:#8B9BF8;
+    --violet:   #7C3AED;
+    --dark:     #0C0D1A;
+    --white:    #FFFFFF;
+    --off:      #F5F5F8;
+    --ink:      #0E0F1C;
+    --mid:      #6B6C80;
+    --line:     #E2E2EA;
+    --amber:    #E8A020;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    background: var(--white);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 56px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-wordmark { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 18px; letter-spacing: 0.18em; color: var(--ink); }
+  .nav-right { display: flex; align-items: center; gap: 32px; }
+  .nav-link { font-size: 12px; font-weight: 500; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+  .nav-link:hover { color: var(--ink); }
+  .nav-link.active { color: var(--indigo); font-weight: 600; }
+  .nav-cta { font-size: 12px; font-weight: 600; color: var(--white); background: var(--indigo); padding: 9px 20px; border-radius: 6px; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--indigo-dk); }
+
+  /* ── PAGE HEADER ── */
+  .page-head {
+    padding: 120px 56px 72px;
+    border-bottom: 1px solid var(--line);
+    position: relative; overflow: hidden;
+  }
+  .page-head::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.4; pointer-events: none;
+  }
+  .page-head::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
+    background: linear-gradient(transparent, var(--white));
+  }
+  .ph-inner { position: relative; z-index: 1; max-width: 640px; }
+  .ph-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--indigo); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ph-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--indigo); }
+  .ph-h1 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800;
+    font-size: 52px;
+    line-height: 1.05; letter-spacing: -0.02em; color: var(--ink);
+    margin-bottom: 20px;
+  }
+  .ph-h1 .dim { color: var(--mid); }
+  .ph-p { font-size: 15px; line-height: 1.75; color: var(--mid); max-width: 480px; }
+
+  /* ── STICKY AREA NAV ── */
+  .area-nav {
+    position: sticky; top: 64px; z-index: 90;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 0 56px;
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto;
+  }
+  .area-nav::-webkit-scrollbar { display: none; }
+  .area-tab {
+    display: flex; align-items: center; gap: 8px;
+    padding: 16px 24px;
+    font-size: 12px; font-weight: 500; color: var(--mid);
+    text-decoration: none; white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .area-tab:hover { color: var(--ink); }
+  .area-tab.active { color: var(--indigo); border-bottom-color: var(--indigo); font-weight: 600; }
+  .area-tab-num {
+    font-size: 9px; font-weight: 700;
+    background: var(--off); color: var(--mid);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .area-tab.active .area-tab-num { background: rgba(91,110,245,0.1); color: var(--indigo); }
+
+  /* ── ÁREA SECTION ── */
+  .area-section { border-bottom: 1px solid var(--line); }
+
+  .area-header {
+    padding: 72px 56px 48px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end;
+  }
+  .area-header.dark-bg {
+    background: var(--dark);
+  }
+  .area-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--indigo); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .area-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--indigo); }
+  .area-eyebrow.light { color: var(--indigo-lt); }
+  .area-eyebrow.light::before { background: var(--indigo-lt); }
+  .area-h2 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 36px;
+    color: var(--ink); line-height: 1.1;
+  }
+  .area-h2.white { color: var(--white); }
+  .area-desc { font-size: 14px; line-height: 1.8; color: var(--mid); }
+  .area-desc.white { color: rgba(255,255,255,0.45); }
+
+  /* ── SERVICE CARDS ── */
+  .services-list {
+    padding: 0 56px 64px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .services-list.dark-bg { background: var(--dark); padding-top: 0; }
+
+  .svc-row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+    background: var(--white);
+  }
+  .svc-row:hover { box-shadow: 0 4px 24px rgba(91,110,245,0.08); }
+
+  .svc-row.dark {
+    border-color: rgba(91,110,245,0.15);
+    background: rgba(255,255,255,0.02);
+  }
+  .svc-row.dark:hover { box-shadow: 0 4px 24px rgba(91,110,245,0.15); }
+
+  /* lado izquierdo */
+  .svc-left {
+    padding: 32px 28px;
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 12px;
+    background: var(--off);
+  }
+  .svc-row.dark .svc-left {
+    background: rgba(91,110,245,0.04);
+    border-right-color: rgba(91,110,245,0.12);
+  }
+  .svc-icon-wrap {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .svc-row.dark .svc-icon-wrap {
+    background: rgba(91,110,245,0.1);
+    border-color: rgba(91,110,245,0.2);
+  }
+  .svc-num-tag {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--indigo);
+  }
+  .svc-row.dark .svc-num-tag { color: var(--indigo-lt); }
+  .svc-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 17px;
+    color: var(--ink); line-height: 1.2;
+  }
+  .svc-row.dark .svc-title { color: var(--white); }
+
+  /* lado derecho */
+  .svc-right {
+    padding: 32px 36px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px 48px;
+  }
+  .svc-desc-block {}
+  .svc-desc-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--mid); margin-bottom: 8px;
+  }
+  .svc-row.dark .svc-desc-label { color: rgba(255,255,255,0.25); }
+  .svc-desc-text { font-size: 13px; line-height: 1.75; color: var(--mid); }
+  .svc-row.dark .svc-desc-text { color: rgba(255,255,255,0.45); }
+
+  .svc-includes-block {}
+  .svc-includes-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--mid); margin-bottom: 10px;
+  }
+  .svc-row.dark .svc-includes-label { color: rgba(255,255,255,0.25); }
+  .svc-includes-list { display: flex; flex-direction: column; gap: 6px; }
+  .svc-inc-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; color: var(--ink); line-height: 1.5;
+  }
+  .svc-row.dark .svc-inc-item { color: rgba(255,255,255,0.6); }
+  .svc-inc-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--indigo); flex-shrink: 0; margin-top: 6px;
+  }
+
+  /* ── CTA ENTRE SECCIONES ── */
+  .inline-cta {
+    margin: 0 56px 64px;
+    padding: 28px 36px;
+    background: rgba(91,110,245,0.04);
+    border: 1px solid rgba(91,110,245,0.15);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    flex-wrap: wrap;
+  }
+  .inline-cta.dark-bg {
+    background: rgba(91,110,245,0.08);
+    border-color: rgba(91,110,245,0.2);
+    margin-bottom: 0; margin-top: 0; border-radius: 0;
+    padding: 28px 56px;
+  }
+  .icta-text { font-size: 14px; color: var(--mid); }
+  .icta-text.white { color: rgba(255,255,255,0.5); }
+  .icta-text strong { color: var(--ink); font-weight: 600; }
+  .icta-text.white strong { color: var(--white); }
+  .btn-sm {
+    background: var(--indigo); color: var(--white);
+    padding: 11px 22px; border-radius: 7px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+    text-decoration: none; white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .btn-sm:hover { background: var(--indigo-dk); }
+  .btn-sm-ghost {
+    border: 1px solid rgba(91,110,245,0.3); color: var(--indigo-lt);
+    padding: 11px 22px; border-radius: 7px;
+    font-size: 12px; font-weight: 600;
+    text-decoration: none; white-space: nowrap;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-sm-ghost:hover { border-color: var(--indigo-lt); color: var(--white); }
+
+  /* ── CTA FINAL ── */
+  .final-cta {
+    padding: 96px 56px;
+    text-align: center;
+    background: var(--off);
+    border-top: 1px solid var(--line);
+  }
+  .fcta-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--indigo); margin-bottom: 16px;
+  }
+  .fcta-h2 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 38px;
+    color: var(--ink); line-height: 1.1; margin-bottom: 14px;
+  }
+  .fcta-h2 .dim { color: var(--mid); }
+  .fcta-p { font-size: 15px; color: var(--mid); line-height: 1.7; max-width: 420px; margin: 0 auto 36px; }
+  .fcta-btns { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .btn-main { background: var(--indigo); color: var(--white); padding: 14px 30px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: background 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-main:hover { background: var(--indigo-dk); }
+  .btn-outline { border: 1px solid var(--line); color: var(--mid); padding: 14px 30px; border-radius: 8px; font-size: 13px; font-weight: 500; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+  .btn-outline:hover { border-color: var(--indigo); color: var(--indigo); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 28px 56px;
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    background: var(--white);
+  }
+  .footer-brand { display: flex; align-items: center; gap: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 15px; letter-spacing: 0.15em; color: var(--ink); }
+  .footer-copy { font-size: 11px; color: var(--mid); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 11px; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--indigo); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    nav { padding: 0 20px; height: 56px; }
+    .nav-right .nav-link { display: none; }
+    .nav-wordmark { font-size: 16px; }
+    .nav-cta { padding: 8px 14px; font-size: 12px; }
+
+    .page-head { padding: 72px 24px 32px; }
+    .ph-h1 { font-size: 28px; line-height: 1.12; }
+    .ph-p { font-size: 13px; max-width: 100%; }
+
+    .area-nav { padding: 0 8px; }
+    .area-tab { padding: 12px 12px; font-size: 11px; }
+
+    .area-header { grid-template-columns: 1fr; padding: 32px 24px 20px; gap: 12px; }
+    .area-h2 { font-size: 24px; }
+    .area-desc { font-size: 13px; }
+
+    .services-list { padding: 0 24px 32px; gap: 8px; }
+    .svc-row { grid-template-columns: 1fr; }
+    .svc-left { border-right: none; border-bottom: 1px solid var(--line); padding: 20px 18px; }
+    .svc-row.dark .svc-left { border-right: none; }
+    .svc-title { font-size: 15px; }
+    .svc-right { grid-template-columns: 1fr; gap: 16px; padding: 20px 18px; }
+    .svc-desc-text { font-size: 13px; }
+    .svc-inc-item { font-size: 12px; }
+
+    .inline-cta { margin: 0 24px 32px; flex-direction: column; }
+    .inline-cta.dark-bg { padding: 20px 24px; margin: 0; }
+
+    .final-cta { padding: 40px 24px; }
+    .fcta-h2 { font-size: 26px; }
+    .fcta-btns { flex-direction: column; align-items: stretch; }
+    .btn-main { text-align: center; justify-content: center; }
+    .btn-outline { text-align: center; justify-content: center; }
+
+    footer { padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 12px; }
+    .footer-links { flex-wrap: wrap; gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg width="16" height="13" viewBox="0 0 70 56" fill="none">
+      <rect x="0" y="38" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="1.5" fill="none" opacity="0.4"/>
+      <rect x="0" y="23" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="1.8" fill="none" opacity="0.65"/>
+      <rect x="14" y="8"  width="50" height="10" rx="2" fill="#5B6EF5"/>
+    </svg>
+    <span class="nav-wordmark">CUSOL</span>
+  </a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="#" class="nav-link active">Servicios</a>
+    <a href="cusol-contacto.html" class="nav-link">Contacto</a>
+    <a href="cusol-contacto.html" class="nav-cta">Agendar reunión</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-head">
+  <div class="ph-inner">
+    <div class="ph-eyebrow">Servicios</div>
+    <h1 class="ph-h1">Lo que hacemos <span class="dim">y cómo lo hacemos.</span></h1>
+    <p class="ph-p">Tres áreas de trabajo, doce servicios. Cada uno pensado para resolver un problema concreto de tu empresa.</p>
+  </div>
+</div>
+
+<!-- ÁREA NAV -->
+<div class="area-nav">
+  <a href="#erp" class="area-tab active">Sistemas ERP <span class="area-tab-num">6</span></a>
+  <a href="#dev" class="area-tab">Desarrollo de Software <span class="area-tab-num">3</span></a>
+  <a href="#bi" class="area-tab">Business Intelligence e IA <span class="area-tab-num">2</span></a>
+</div>
+
+
+<!-- ══════════════════════════════
+     ÁREA 01: ERP
+══════════════════════════════ -->
+<div class="area-section" id="erp">
+
+  <div class="area-header">
+    <div>
+      <div class="area-eyebrow">Área 01</div>
+      <div class="area-h2">Sistemas ERP</div>
+    </div>
+    <div class="area-desc">Migración, implementación y consultoría de sistemas de gestión empresarial. Especializados en ERPs regionales, con foco especial en Softland.</div>
+  </div>
+
+  <div class="services-list">
+    <!-- 01: Diagnóstico -->
+    <div class="svc-row">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">🔍</div>
+        <div class="svc-num-tag">01 · ERP</div>
+        <div class="svc-title">Diagnóstico ERP</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Relevamiento completo del sistema actual. Analizamos módulos, datos, integraciones y procesos críticos para entregar un informe claro con opciones y riesgos identificados.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Relevamiento de módulos activos</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Mapa de procesos críticos</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Identificación de riesgos operativos</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Informe ejecutivo con opciones</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Recomendación de próximos pasos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02: Consultoría Softland -->
+    <div class="svc-row">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">🛠️</div>
+        <div class="svc-num-tag">02 · Softland</div>
+        <div class="svc-title">Consultoría Softland</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Consultoría técnica y funcional sobre Softland para empresas que ya lo usan y necesitan sacarle más provecho, resolver problemas o capacitar a su equipo.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Diagnóstico del uso actual del sistema</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Optimización de módulos y procesos</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Resolución de problemas operativos</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Capacitación técnica y funcional</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Documentación de procesos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03: Customización Softland Logic -->
+    <div class="svc-row">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">🧩</div>
+        <div class="svc-num-tag">03 · Softland</div>
+        <div class="svc-title">Customización Softland Logic</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Desarrollo de interfaces, reportes y circuitos personalizados dentro de Softland Logic. El sistema se adapta a tu operación, no al revés.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Creación de interfaces a medida</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Reportes personalizados</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Circuitos y flujos de trabajo</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Automatización de procesos internos</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Pruebas y documentación</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04: Asistencia en elección -->
+    <div class="svc-row">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">🧭</div>
+        <div class="svc-num-tag">04 · ERP</div>
+        <div class="svc-title">Asistencia en elección de ERP</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Acompañamiento objetivo para elegir el ERP que mejor se adapta a tu negocio. Análisis de opciones del mercado sin atadura a ningún proveedor.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Relevamiento de procesos y necesidades</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Análisis comparativo de opciones</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Evaluación de costos y tiempos</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Informe de recomendación fundamentado</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Sin conflicto de interés con proveedores</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05: Implementación ERP -->
+    <div class="svc-row">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">⚙️</div>
+        <div class="svc-num-tag">05 · ERP</div>
+        <div class="svc-title">Implementación ERP</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Configuración e implementación del ERP elegido, completamente adaptado a los procesos reales de la empresa. Sin configuraciones genéricas ni funcionalidades que nadie va a usar.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Relevamiento funcional detallado</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Configuración a medida del sistema</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Carga de datos iniciales</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Capacitación del equipo completo</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Manual de operación y soporte</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06: Migración ERP -->
+    <div class="svc-row">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">🔄</div>
+        <div class="svc-num-tag">06 · ERP</div>
+        <div class="svc-title">Migración ERP</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Proceso completo de migración desde tu sistema actual hacia el ERP elegido. Sin pérdida de datos históricos y con continuidad operativa durante toda la transición.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Extracción y transformación de datos (ETL)</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Migración completa de históricos</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Validación y conciliación post-migración</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Operación en paralelo hasta go-live</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Soporte post-migración</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inline-cta">
+    <div class="icta-text"><strong>¿Tenés Softland y no sabés si migrar o quedarte?</strong> Te ayudamos a tomar esa decisión con información concreta.</div>
+    <a href="cusol-contacto.html" class="btn-sm">Agendar reunión →</a>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════
+     ÁREA 02: DESARROLLO
+══════════════════════════════ -->
+<div class="area-section" id="dev">
+
+  <div class="area-header dark-bg">
+    <div>
+      <div class="area-eyebrow light">Área 02</div>
+      <div class="area-h2 white">Desarrollo de Software</div>
+    </div>
+    <div class="area-desc white">Aplicaciones web, APIs e interfaces a medida. Stack moderno con asistencia de IA para acelerar entregas sin resignar calidad.</div>
+  </div>
+
+  <div class="services-list dark-bg">
+
+    <div class="svc-row dark">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">🌐</div>
+        <div class="svc-num-tag">07 · Dev</div>
+        <div class="svc-title">Apps y webs a medida</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Desarrollo de aplicaciones web completas con panel de administración, autenticación de usuarios y base de datos en tiempo real. Diseño mobile-first, listas para producción.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Diseño UI/UX personalizado</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Base de datos en tiempo real</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Autenticación y roles de usuario</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Panel de administración</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Deploy en producción incluido</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="svc-row dark">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">🔌</div>
+        <div class="svc-num-tag">08 · Dev</div>
+        <div class="svc-title">APIs e integraciones</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Desarrollo de APIs REST para conectar sistemas que hoy no se comunican. Integraciones con AFIP, e-commerce, CRM, ERP y cualquier plataforma externa.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>API REST documentada</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Integración con sistemas existentes</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Facturación electrónica AFIP</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Autenticación segura</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Webhooks y eventos en tiempo real</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="svc-row dark">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">🖥️</div>
+        <div class="svc-num-tag">09 · Dev</div>
+        <div class="svc-title">Interfaces y portales internos</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Dashboards operativos, portales de empleados, sistemas de turnos y gestión de stock. Cualquier interfaz que reemplace planillas de Excel o procesos manuales.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>UX orientada a eficiencia operativa</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Roles y permisos por usuario</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Exportación de datos (Excel / PDF)</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Integración con sistemas actuales</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Capacitación del equipo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inline-cta dark-bg">
+    <div class="icta-text white"><strong style="color:white">¿Tenés un proceso manual que debería ser automático?</strong> Contanos y lo evaluamos juntos.</div>
+    <a href="cusol-contacto.html" class="btn-sm-ghost">Agendar reunión →</a>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════
+     ÁREA 03: BI e IA
+══════════════════════════════ -->
+<div class="area-section" id="bi">
+
+  <div class="area-header">
+    <div>
+      <div class="area-eyebrow">Área 03</div>
+      <div class="area-h2">Business Intelligence e IA</div>
+    </div>
+    <div class="area-desc">Tableros de control, automatizaciones e inteligencia artificial aplicada a los procesos del negocio. Decisiones basadas en datos, no en intuición.</div>
+  </div>
+
+  <div class="services-list">
+
+    <div class="svc-row">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">📊</div>
+        <div class="svc-num-tag">10 · BI</div>
+        <div class="svc-title">Tableros de BI</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Dashboards interactivos que consolidan datos de múltiples fuentes en una única vista en tiempo real. KPIs claros para cada área, sin depender de IT para cada consulta.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Conexión a múltiples fuentes de datos</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>KPIs y métricas clave por área</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Actualización automática</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Acceso por roles (gerencia, operativo)</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Exportación a PDF y Excel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>
+
+    <div class="svc-row">
+      <div class="svc-left">
+        <div class="svc-icon-wrap">🗺️</div>
+        <div class="svc-num-tag">12 · Consultoría</div>
+        <div class="svc-title">Consultoría tecnológica</div>
+      </div>
+      <div class="svc-right">
+        <div class="svc-desc-block">
+          <div class="svc-desc-label">Descripción</div>
+          <div class="svc-desc-text">Asesoramiento estratégico para empresas que necesitan tomar decisiones sobre tecnología sin sesgo de proveedor. Roadmap, evaluación de sistemas y arquitectura.</div>
+        </div>
+        <div class="svc-includes-block">
+          <div class="svc-includes-label">Incluye</div>
+          <div class="svc-includes-list">
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Análisis de situación tecnológica actual</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Evaluación de proveedores y sistemas</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Roadmap tecnológico a medida</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Revisión de arquitectura existente</div>
+            <div class="svc-inc-item"><div class="svc-inc-dot"></div>Sin conflicto de interés</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inline-cta">
+    <div class="icta-text"><strong>¿No encontrás lo que necesitás?</strong> Contanos tu caso y lo analizamos.</div>
+    <a href="cusol-contacto.html" class="btn-sm">Agendar reunión →</a>
+  </div>
+
+</div>
+
+
+<!-- CTA FINAL -->
+<div class="final-cta">
+  <div class="fcta-eyebrow">¿Por dónde empezar?</div>
+  <h2 class="fcta-h2">Una reunión. <span class="dim">Sin compromiso.</span></h2>
+  <p class="fcta-p">Contanos qué sistema usás y qué necesitás resolver. En una reunión inicial evaluamos tu situación y te decimos qué opciones tenés.</p>
+  <div class="fcta-btns">
+    <a href="cusol-contacto.html" class="btn-main">Agendar reunión →</a>
+    <a href="https://wa.me/5491157036750" target="_blank" class="btn-outline">WhatsApp</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <svg width="14" height="11" viewBox="0 0 70 56" fill="none">
+      <rect x="0" y="38" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="2" fill="none" opacity="0.4"/>
+      <rect x="0" y="23" width="50" height="10" rx="2" stroke="#5B6EF5" stroke-width="2" fill="none" opacity="0.65"/>
+      <rect x="14" y="8" width="50" height="10" rx="2" fill="#5B6EF5"/>
+    </svg>
+    CUSOL
+    <span class="footer-copy" style="margin-left:8px">© 2025 Customer Solutions</span>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="#">Servicios</a>
+    <a href="cusol-contacto.html">Contacto</a>
+    <a href="mailto:hola@cusol.com.ar">hola@cusol.com.ar</a>
+  </div>
+</footer>
+
+<script>
+  // Highlight tab activo al hacer scroll
+  const sections = document.querySelectorAll('.area-section');
+  const tabs = document.querySelectorAll('.area-tab');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tabs.forEach(t => t.classList.remove('active'));
+        const id = e.target.id;
+        const active = document.querySelector(`.area-tab[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
